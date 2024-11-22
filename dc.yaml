@@ -1,0 +1,22 @@
+apiVersion: athena.services.k8s.aws/v1alpha1
+kind: DataCatalog
+metadata:
+  name: my-dc
+spec:
+  name: my-dc
+  description: second description
+  type: HIVE
+  parameters:
+    # catalog-id: "014498636225"
+    metadata-function: arn:aws:lambda:us-west-2:014498636225:function:test-athena-2
+# ---
+# apiVersion: athena.services.k8s.aws/v1alpha1
+# kind: DataCatalog
+# metadata:
+#   name: my-dc
+# spec:
+#   name: my-dc
+#   description: initial description
+#   type: GLUE
+#   parameters:
+#     function: arn:aws:lambda:us-west-2:014498636225:function:test-athena

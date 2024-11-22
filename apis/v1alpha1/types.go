@@ -96,18 +96,29 @@ type CustomerContentEncryptionConfiguration struct {
 	KMSKey *string `json:"kmsKey,omitempty"`
 }
 
+// The summary information for the data catalog, which includes its name and
+// type.
+type DataCatalogSummary struct {
+	CatalogName *string `json:"catalogName,omitempty"`
+	Type        *string `json:"type_,omitempty"`
+}
+
 // Contains information about a data catalog in an Amazon Web Services account.
 //
 // In the Athena console, data catalogs are listed as "data sources" on the
 // Data sources page under the Data source name column.
-type DataCatalog struct {
-	Description *string `json:"description,omitempty"`
+type DataCatalog_SDK struct {
+	Description *string            `json:"description,omitempty"`
+	Name        *string            `json:"name,omitempty"`
+	Parameters  map[string]*string `json:"parameters,omitempty"`
+	Type        *string            `json:"type_,omitempty"`
 }
 
 // Contains metadata information for a database in a data catalog.
 type Database struct {
-	Description *string `json:"description,omitempty"`
-	Name        *string `json:"name,omitempty"`
+	Description *string            `json:"description,omitempty"`
+	Name        *string            `json:"name,omitempty"`
+	Parameters  map[string]*string `json:"parameters,omitempty"`
 }
 
 // If query and calculation results are encrypted in Amazon S3, indicates the
@@ -115,6 +126,13 @@ type Database struct {
 type EncryptionConfiguration struct {
 	EncryptionOption *string `json:"encryptionOption,omitempty"`
 	KMSKey           *string `json:"kmsKey,omitempty"`
+}
+
+// Contains data processing unit (DPU) configuration settings and parameter
+// mappings for a notebook engine.
+type EngineConfiguration struct {
+	AdditionalConfigs map[string]*string `json:"additionalConfigs,omitempty"`
+	SparkProperties   map[string]*string `json:"sparkProperties,omitempty"`
 }
 
 // The Athena engine version for running queries, or the PySpark engine version
@@ -181,6 +199,11 @@ type QueryExecution struct {
 	ResultConfiguration *ResultConfiguration `json:"resultConfiguration,omitempty"`
 	SubstatementType    *string              `json:"substatementType,omitempty"`
 	WorkGroup           *string              `json:"workGroup,omitempty"`
+}
+
+// The database and data catalog context in which the query execution occurs.
+type QueryExecutionContext struct {
+	Catalog *string `json:"catalog,omitempty"`
 }
 
 // The amount of data scanned during the query execution and the amount of time
@@ -284,7 +307,8 @@ type SessionSummary struct {
 
 // Contains metadata for a table.
 type TableMetadata struct {
-	Name *string `json:"name,omitempty"`
+	Name       *string            `json:"name,omitempty"`
+	Parameters map[string]*string `json:"parameters,omitempty"`
 }
 
 // A label that you assign to a resource. Athena resources include workgroups,
