@@ -17,16 +17,21 @@ for them.
 
 from dataclasses import dataclass
 from acktest.bootstrapping import Resources
+from acktest.bootstrapping.function import Function
 from e2e import bootstrap_directory
 
 @dataclass
 class BootstrapResources(Resources):
-    pass
+    LambdaFn: Function
 
 _bootstrap_resources = None
 
-def get_bootstrap_resources(bootstrap_file_name: str = "bootstrap.pkl") -> BootstrapResources:
+def get_bootstrap_resources(
+    bootstrap_file_name: str = "bootstrap.pkl",
+) -> BootstrapResources:
     global _bootstrap_resources
     if _bootstrap_resources is None:
-        _bootstrap_resources = BootstrapResources.deserialize(bootstrap_directory, bootstrap_file_name=bootstrap_file_name)
+        _bootstrap_resources = BootstrapResources.deserialize(
+            bootstrap_directory, bootstrap_file_name=bootstrap_file_name
+        )
     return _bootstrap_resources

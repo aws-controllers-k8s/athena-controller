@@ -18,12 +18,22 @@ from acktest.bootstrapping import Resources, BootstrapFailureException
 
 from e2e import bootstrap_directory
 from e2e.bootstrap_resources import BootstrapResources
+from acktest.bootstrapping.function import Function
+from acktest.aws.identity import get_region, get_account_id
 
 def service_bootstrap() -> Resources:
     logging.getLogger().setLevel(logging.INFO)
 
+    aws_region = get_region()
+    account_id = get_account_id()
+    code_uri=f"{account_id}.dkr.ecr.{aws_region}.amazonaws.com/ack-e2e-testing-athena-controller:v1"
+    
     resources = BootstrapResources(
-        # TODO: Add bootstrapping when you have defined the resources
+        LambdaFn=Function(
+            name_prefix="aws-athena-data-catalog-",
+            code_uri=code_uri,
+            service="athena",
+        ),
     )
 
     try:
