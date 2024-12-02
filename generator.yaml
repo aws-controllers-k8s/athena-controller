@@ -1,7 +1,7 @@
 ignore:
   resource_names:
     - CapacityReservation
-    - DataCatalog
+    # - DataCatalog
     - NamedQuery
     - Notebook
     #- PreparedStatement
@@ -58,3 +58,11 @@ resources:
       errors:
         404:
           code: ResourceNotFoundException
+  DataCatalog:
+    fields:
+      Type:
+        go_tag: json:"type,omitempty"
+    exceptions:
+      errors:
+        404:
+          code: InvalidRequestException

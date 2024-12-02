@@ -1,0 +1,10 @@
+apiVersion: athena.services.k8s.aws/v1alpha1
+kind: DataCatalog
+metadata:
+  name: $DATA_CATALOG_NAME
+spec:
+  name: $DATA_CATALOG_NAME
+  description: initial description
+  type: HIVE
+  parameters:
+    metadata-function: $FUNCTION_ARN
