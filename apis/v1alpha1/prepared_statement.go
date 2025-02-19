@@ -26,15 +26,22 @@ import (
 type PreparedStatementSpec struct {
 
 	// The description of the prepared statement.
+
 	Description *string `json:"description,omitempty"`
 	// The name of the prepared statement.
+
 	// +kubebuilder:validation:Required
+
 	Name *string `json:"name"`
 	// The query string for the prepared statement.
+
 	// +kubebuilder:validation:Required
+
 	QueryStatement *string `json:"queryStatement"`
 	// The name of the workgroup to which the prepared statement belongs.
+
 	// +kubebuilder:validation:Required
+
 	WorkGroup *string `json:"workGroup"`
 }
 
@@ -45,7 +52,7 @@ type PreparedStatementStatus struct {
 	// constructed ARN for the resource
 	// +kubebuilder:validation:Optional
 	ACKResourceMetadata *ackv1alpha1.ResourceMetadata `json:"ackResourceMetadata"`
-	// All CRS managed by ACK have a common `Status.Conditions` member that
+	// All CRs managed by ACK have a common `Status.Conditions` member that
 	// contains a collection of `ackv1alpha1.Condition` objects that describe
 	// the various terminal states of the CR and its backend AWS service API
 	// resource
