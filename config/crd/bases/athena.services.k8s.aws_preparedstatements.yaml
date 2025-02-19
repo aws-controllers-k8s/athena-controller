@@ -43,17 +43,12 @@ spec:
               A prepared SQL statement for use with Athena.
             properties:
               description:
-                description: The description of the prepared statement.
                 type: string
               name:
-                description: The name of the prepared statement.
                 type: string
               queryStatement:
-                description: The query string for the prepared statement.
                 type: string
               workGroup:
-                description: The name of the workgroup to which the prepared statement
-                  belongs.
                 type: string
             required:
             - name
@@ -94,7 +89,7 @@ spec:
                 type: object
               conditions:
                 description: |-
-                  All CRS managed by ACK have a common `Status.Conditions` member that
+                  All CRs managed by ACK have a common `Status.Conditions` member that
                   contains a collection of `ackv1alpha1.Condition` objects that describe
                   the various terminal states of the CR and its backend AWS service API
                   resource

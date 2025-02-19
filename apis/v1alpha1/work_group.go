@@ -41,13 +41,19 @@ type WorkGroupSpec struct {
 	// limit for the amount of bytes scanned (cutoff) per query, if it is specified,
 	// and whether workgroup's settings (specified with EnforceWorkGroupConfiguration)
 	// in the WorkGroupConfiguration override client-side settings. See WorkGroupConfiguration$EnforceWorkGroupConfiguration.
+
 	Configuration *WorkGroupConfiguration `json:"configuration,omitempty"`
 	// The workgroup description.
+
 	Description *string `json:"description,omitempty"`
 	// The workgroup name.
+
+	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable once set"
 	// +kubebuilder:validation:Required
+
 	Name *string `json:"name"`
 	// A list of comma separated tags to add to the workgroup that is created.
+
 	Tags []*Tag `json:"tags,omitempty"`
 }
 
@@ -58,7 +64,7 @@ type WorkGroupStatus struct {
 	// constructed ARN for the resource
 	// +kubebuilder:validation:Optional
 	ACKResourceMetadata *ackv1alpha1.ResourceMetadata `json:"ackResourceMetadata"`
-	// All CRS managed by ACK have a common `Status.Conditions` member that
+	// All CRs managed by ACK have a common `Status.Conditions` member that
 	// contains a collection of `ackv1alpha1.Condition` objects that describe
 	// the various terminal states of the CR and its backend AWS service API
 	// resource

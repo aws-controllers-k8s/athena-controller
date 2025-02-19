@@ -52,14 +52,14 @@ spec:
             properties:
               configuration:
                 description: |-
-                  Contains configuration information for creating an Athena SQL workgroup or
-                  Spark enabled Athena workgroup. Athena SQL workgroup configuration includes
-                  the location in Amazon S3 where query and calculation results are stored,
-                  the encryption configuration, if any, used for encrypting query results,
-                  whether the Amazon CloudWatch Metrics are enabled for the workgroup, the
-                  limit for the amount of bytes scanned (cutoff) per query, if it is specified,
-                  and whether workgroup's settings (specified with EnforceWorkGroupConfiguration)
-                  in the WorkGroupConfiguration override client-side settings. See WorkGroupConfiguration$EnforceWorkGroupConfiguration.
+                  The configuration of the workgroup, which includes the location in Amazon
+                  S3 where query and calculation results are stored, the encryption option,
+                  if any, used for query and calculation results, whether the Amazon CloudWatch
+                  Metrics are enabled for the workgroup and whether workgroup settings override
+                  query settings, and the data usage limits for the amount of data scanned
+                  per query or per workgroup. The workgroup settings override is specified
+                  in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration.
+                  See WorkGroupConfiguration$EnforceWorkGroupConfiguration.
                 properties:
                   additionalConfiguration:
                     type: string
@@ -152,14 +152,13 @@ spec:
                     type: object
                 type: object
               description:
-                description: The workgroup description.
                 type: string
               name:
-                description: The workgroup name.
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable once set
+                  rule: self == oldSelf
               tags:
-                description: A list of comma separated tags to add to the workgroup
-                  that is created.
                 items:
                   description: |-
                     A label that you assign to a resource. Athena resources include workgroups,
@@ -217,7 +216,7 @@ spec:
                 type: object
               conditions:
                 description: |-
-                  All CRS managed by ACK have a common `Status.Conditions` member that
+                  All CRs managed by ACK have a common `Status.Conditions` member that
                   contains a collection of `ackv1alpha1.Condition` objects that describe
                   the various terminal states of the CR and its backend AWS service API
                   resource
