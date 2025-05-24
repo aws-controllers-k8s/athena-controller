@@ -45,6 +45,8 @@ type WorkGroupSpec struct {
 	// The workgroup description.
 	Description *string `json:"description,omitempty"`
 	// The workgroup name.
+	//
+	// Regex Pattern: `^[a-zA-Z0-9._-]{1,128}$`
 	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable once set"
 	// +kubebuilder:validation:Required
 	Name *string `json:"name"`
