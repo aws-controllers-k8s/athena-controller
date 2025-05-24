@@ -155,7 +155,10 @@ spec:
                 description: The workgroup description.
                 type: string
               name:
-                description: The workgroup name.
+                description: |-
+                  The workgroup name.
+
+                  Regex Pattern: `^[a-zA-Z0-9._-]{1,128}$`
                 type: string
                 x-kubernetes-validations:
                 - message: Value is immutable once set
