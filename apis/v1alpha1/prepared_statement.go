@@ -28,12 +28,16 @@ type PreparedStatementSpec struct {
 	// The description of the prepared statement.
 	Description *string `json:"description,omitempty"`
 	// The name of the prepared statement.
+	//
+	// Regex Pattern: `^[a-zA-Z_][a-zA-Z0-9_@:]{1,256}$`
 	// +kubebuilder:validation:Required
 	Name *string `json:"name"`
 	// The query string for the prepared statement.
 	// +kubebuilder:validation:Required
 	QueryStatement *string `json:"queryStatement"`
 	// The name of the workgroup to which the prepared statement belongs.
+	//
+	// Regex Pattern: `^[a-zA-Z0-9._-]{1,128}$`
 	// +kubebuilder:validation:Required
 	WorkGroup *string `json:"workGroup"`
 }
