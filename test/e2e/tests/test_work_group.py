@@ -76,7 +76,7 @@ class TestWorkGroup:
         ref, _ = simple_work_group
 
         time.sleep(CREATE_WAIT_SECONDS)
-        condition.assert_synced(ref)
+        condition.assert_ready(ref)
 
         cr = k8s.get_resource(ref)
 
