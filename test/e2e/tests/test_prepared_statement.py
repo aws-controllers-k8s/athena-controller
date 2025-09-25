@@ -79,7 +79,7 @@ class TestPreparedStatement:
         ref, _ = simple_prepared_statement
 
         time.sleep(CREATE_WAIT_SECONDS)
-        condition.assert_synced(ref)
+        condition.assert_ready(ref)
 
         cr = k8s.get_resource(ref)
 
