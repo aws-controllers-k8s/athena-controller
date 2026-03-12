@@ -7,7 +7,6 @@ ignore:
     #- PreparedStatement
     - PresignedNotebookUrl
     # - WorkGroup
-model_name: athena
 resources:
   WorkGroup:
     fields:
