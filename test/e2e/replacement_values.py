@@ -14,5 +14,17 @@
 Athena-specific test variables.
 """
 
+from acktest.aws import identity
+
+# LAMBDA and HIVE data catalogs require a Lambda function ARN in their
+# parameters. Athena does not validate that the function exists at catalog
+# creation time, but the ARN must be well-formed, so build it from the current
+# test account and region.
+LAMBDA_FUNCTION_ARN = (
+    f"arn:aws:lambda:{identity.get_region()}:{identity.get_account_id()}"
+    ":function:ack-athena-e2e-data-catalog"
+)
+
 REPLACEMENT_VALUES = {
+    "LAMBDA_FUNCTION_ARN": LAMBDA_FUNCTION_ARN,
 }
