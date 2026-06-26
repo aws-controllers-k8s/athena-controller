@@ -13,6 +13,21 @@ resources:
       Name:
         is_primary_key: true
         is_immutable: true
+      Configuration.ExecutionRole:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+      Configuration.CustomerContentEncryptionConfiguration.KMSKey:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.ACKResourceMetadata.ARN
+      Configuration.ResultConfiguration.EncryptionConfiguration.KMSKey:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.ACKResourceMetadata.ARN
     renames:
       operations:
         GetWorkGroup:

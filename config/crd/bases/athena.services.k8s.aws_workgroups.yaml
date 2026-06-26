@@ -74,6 +74,20 @@ spec:
                     properties:
                       kmsKey:
                         type: string
+                      kmsKeyRef:
+                        description: Reference field for KMSKey
+                        properties:
+                          from:
+                            description: |-
+                              AWSResourceReference provides all the values necessary to reference another
+                              k8s resource for finding the identifier(Id/ARN/Name)
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            type: object
+                        type: object
                     type: object
                   enableMinimumEncryptionConfiguration:
                     type: boolean
@@ -91,6 +105,20 @@ spec:
                     type: object
                   executionRole:
                     type: string
+                  executionRoleRef:
+                    description: Reference field for ExecutionRole
+                    properties:
+                      from:
+                        description: |-
+                          AWSResourceReference provides all the values necessary to reference another
+                          k8s resource for finding the identifier(Id/ARN/Name)
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        type: object
+                    type: object
                   identityCenterConfiguration:
                     description: Specifies whether the workgroup is IAM Identity Center
                       supported.
@@ -144,6 +172,20 @@ spec:
                             type: string
                           kmsKey:
                             type: string
+                          kmsKeyRef:
+                            description: Reference field for KMSKey
+                            properties:
+                              from:
+                                description: |-
+                                  AWSResourceReference provides all the values necessary to reference another
+                                  k8s resource for finding the identifier(Id/ARN/Name)
+                                properties:
+                                  name:
+                                    type: string
+                                  namespace:
+                                    type: string
+                                type: object
+                            type: object
                         type: object
                       expectedBucketOwner:
                         type: string
