@@ -96,6 +96,8 @@ type ColumnInfo struct {
 // value is null. This setting does not apply to Athena SQL workgroups.
 type CustomerContentEncryptionConfiguration struct {
 	KMSKey *string `json:"kmsKey,omitempty"`
+	// Reference field for KMSKey
+	KMSKeyRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"kmsKeyRef,omitempty"`
 }
 
 // Contains information about a data catalog in an Amazon Web Services account.
@@ -117,6 +119,8 @@ type Database struct {
 type EncryptionConfiguration struct {
 	EncryptionOption *string `json:"encryptionOption,omitempty"`
 	KMSKey           *string `json:"kmsKey,omitempty"`
+	// Reference field for KMSKey
+	KMSKeyRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"kmsKeyRef,omitempty"`
 }
 
 // The Athena engine version for running queries, or the PySpark engine version
@@ -335,6 +339,8 @@ type WorkGroupConfiguration struct {
 	// for running sessions.
 	EngineVersion *EngineVersion `json:"engineVersion,omitempty"`
 	ExecutionRole *string        `json:"executionRole,omitempty"`
+	// Reference field for ExecutionRole
+	ExecutionRoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"executionRoleRef,omitempty"`
 	// Specifies whether the workgroup is IAM Identity Center supported.
 	IdentityCenterConfiguration     *IdentityCenterConfiguration `json:"identityCenterConfiguration,omitempty"`
 	PublishCloudWatchMetricsEnabled *bool                        `json:"publishCloudWatchMetricsEnabled,omitempty"`
