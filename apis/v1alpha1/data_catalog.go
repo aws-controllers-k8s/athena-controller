@@ -63,7 +63,6 @@ type DataCatalogSpec struct {
 	Tags []*Tag `json:"tags,omitempty"`
 	// The type of data catalog to create: LAMBDA for a federated catalog, HIVE
 	// for an external hive metastore, or GLUE for an Glue Data Catalog.
-	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable once set"
 	// +kubebuilder:validation:Required
 	Type *string `json:"type,omitempty"`
 }
