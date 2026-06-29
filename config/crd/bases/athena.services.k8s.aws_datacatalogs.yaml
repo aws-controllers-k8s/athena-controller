@@ -107,14 +107,17 @@ spec:
                       type: string
                   type: object
                 type: array
-              type_:
+              type:
                 description: |-
                   The type of data catalog to create: LAMBDA for a federated catalog, HIVE
                   for an external hive metastore, or GLUE for an Glue Data Catalog.
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable once set
+                  rule: self == oldSelf
             required:
             - name
-            - type_
+            - type
             type: object
           status:
             description: DataCatalogStatus defines the observed state of DataCatalog

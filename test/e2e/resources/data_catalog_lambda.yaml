@@ -4,7 +4,7 @@ metadata:
   name: $DATA_CATALOG_NAME
 spec:
   name: $DATA_CATALOG_NAME
-  type_: LAMBDA
+  type: LAMBDA
   description: "lambda data catalog for e2e test"
   parameters:
     metadata-function: "$LAMBDA_FUNCTION_ARN"

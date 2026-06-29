@@ -32,20 +32,6 @@ CREATE_WAIT_SECONDS = 10
 MODIFY_WAIT_SECONDS = 10
 DELETE_WAIT_SECONDS = 10
 
-
-def data_catalog_arn(catalog_name: str) -> str:
-    """Builds the Athena data catalog ARN used for tag operations.
-
-    The DataCatalog API response does not include an ARN, so it is
-    constructed from the documented format for the current test account and
-    region: ``arn:aws:athena:<region>:<account>:datacatalog/<name>``.
-    """
-    return (
-        f"arn:aws:athena:{identity.get_region()}:{identity.get_account_id()}"
-        f":datacatalog/{catalog_name}"
-    )
-
-
 @pytest.fixture(scope="module")
 def athena_client():
     return boto3.client("athena")
@@ -175,19 +161,37 @@ class TestDataCatalogGlue:
         assert latest.get("Parameters", {}).get("catalog-id") == identity.get_account_id()
 
         catalog_tags = athena_client.list_tags_for_resource(
-            ResourceARN=data_catalog_arn(catalog_name),
+            ResourceARN=cr["status"]["ackResourceMetadata"]["arn"],
         )["Tags"]
         tags = tagutil.clean(catalog_tags)
         assert {"Key": "env", "Value": "test"} in tags
 
-        # update description
-        updates = {"spec": {"description": "updated glue catalog"}}
+        # update tags
+        new_tags = [
+            {
+                "key": "env",
+                "value": "changed"
+            },
+            {
+                "key": "k1",
+                "value": "v1"
+            }
+        ]
+        updates = {
+            "spec": {
+                "tags": new_tags
+            }
+        }
         k8s.patch_custom_resource(ref, updates)
         time.sleep(MODIFY_WAIT_SECONDS)
-        condition.assert_synced(ref)
 
-        latest = data_catalog.get(catalog_name)
-        assert latest["Description"] == "updated glue catalog"
+        catalog_tags = athena_client.list_tags_for_resource(
+            ResourceARN=cr["status"]["ackResourceMetadata"]["arn"],
+        )["Tags"]
+        tags = tagutil.clean(catalog_tags)
+        assert len(tags) == 2
+        assert {"Key": "env", "Value": "changed"} in tags
+        assert {"Key": "k1", "Value": "v1"} in tags
 
         # Delete
         _, deleted = k8s.delete_custom_resource(ref, DELETE_WAIT_SECONDS)
@@ -216,7 +220,7 @@ class TestDataCatalogLambda:
         assert "record-function" in parameters
 
         catalog_tags = athena_client.list_tags_for_resource(
-            ResourceARN=data_catalog_arn(catalog_name),
+            ResourceARN=cr["status"]["ackResourceMetadata"]["arn"],
         )["Tags"]
         tags = tagutil.clean(catalog_tags)
         assert {"Key": "env", "Value": "test"} in tags
@@ -255,7 +259,7 @@ class TestDataCatalogHive:
         assert "metadata-function" in latest.get("Parameters", {})
 
         catalog_tags = athena_client.list_tags_for_resource(
-            ResourceARN=data_catalog_arn(catalog_name),
+            ResourceARN=cr["status"]["ackResourceMetadata"]["arn"],
         )["Tags"]
         tags = tagutil.clean(catalog_tags)
         assert {"Key": "env", "Value": "test"} in tags
