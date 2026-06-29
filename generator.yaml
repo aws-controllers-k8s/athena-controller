@@ -79,7 +79,6 @@ resources:
         is_immutable: true
       Type:
         go_tag: json:"type,omitempty"
-        is_immutable: true
     exceptions:
       errors:
         404:

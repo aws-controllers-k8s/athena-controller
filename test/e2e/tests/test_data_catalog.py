@@ -193,6 +193,26 @@ class TestDataCatalogGlue:
         assert {"Key": "env", "Value": "changed"} in tags
         assert {"Key": "k1", "Value": "v1"} in tags
 
+        # update type
+        updates = {
+            "spec": {
+                "type": "HIVE",
+                "parameters": {
+                    "catalog-id": None,
+                    "metadata-function": REPLACEMENT_VALUES["LAMBDA_FUNCTION_ARN"]
+                }
+            }
+        }
+
+        k8s.patch_custom_resource(ref, updates)
+        time.sleep(MODIFY_WAIT_SECONDS)
+
+        latest = data_catalog.get(catalog_name)
+        assert latest is not None
+        assert "catalog-id" not in latest.get("Parameters", {})
+        assert latest["Type"] == "HIVE"
+        assert "metadata-function" in latest.get("Parameters", {})
+
         # Delete
         _, deleted = k8s.delete_custom_resource(ref, DELETE_WAIT_SECONDS)
         assert deleted
