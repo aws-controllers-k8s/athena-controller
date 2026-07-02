@@ -72,6 +72,7 @@ rules:
 - apiGroups:
   - athena.services.k8s.aws
   resources:
+  - datacatalogs
   - preparedstatements
   - workgroups
   verbs:
@@ -85,6 +86,7 @@ rules:
 - apiGroups:
   - athena.services.k8s.aws
   resources:
+  - datacatalogs/status
   - preparedstatements/status
   - workgroups/status
   verbs:

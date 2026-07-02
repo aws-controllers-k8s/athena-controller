@@ -41,6 +41,7 @@ import (
 	svctypes "github.com/aws-controllers-k8s/athena-controller/apis/v1alpha1"
 	svcresource "github.com/aws-controllers-k8s/athena-controller/pkg/resource"
 
+	_ "github.com/aws-controllers-k8s/athena-controller/pkg/resource/data_catalog"
 	_ "github.com/aws-controllers-k8s/athena-controller/pkg/resource/prepared_statement"
 	_ "github.com/aws-controllers-k8s/athena-controller/pkg/resource/work_group"
 
