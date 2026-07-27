@@ -93,8 +93,8 @@ resources:
         404:
           code: InvalidRequestException
     hooks:
-      sdk_create_post_set_output:
-        template_path: hooks/data_catalog/sdk_create_post_set_output.go.tpl
+      sdk_create_pre_set_output:
+        template_path: hooks/data_catalog/sdk_create_pre_set_output.go.tpl
       sdk_read_one_post_set_output:
         template_path: hooks/data_catalog/sdk_read_one_post_set_output.go.tpl
       sdk_update_pre_build_request:
