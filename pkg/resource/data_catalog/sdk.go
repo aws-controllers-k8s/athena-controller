@@ -90,10 +90,20 @@ func (rm *resourceManager) sdkFind(
 	// the original Kubernetes object we passed to the function
 	ko := r.ko.DeepCopy()
 
+	if resp.DataCatalog.ConnectionType != "" {
+		ko.Status.ConnectionType = aws.String(string(resp.DataCatalog.ConnectionType))
+	} else {
+		ko.Status.ConnectionType = nil
+	}
 	if resp.DataCatalog.Description != nil {
 		ko.Spec.Description = resp.DataCatalog.Description
 	} else {
 		ko.Spec.Description = nil
+	}
+	if resp.DataCatalog.Error != nil {
+		ko.Status.Error = resp.DataCatalog.Error
+	} else {
+		ko.Status.Error = nil
 	}
 	if resp.DataCatalog.Name != nil {
 		ko.Spec.Name = resp.DataCatalog.Name
@@ -105,6 +115,11 @@ func (rm *resourceManager) sdkFind(
 	} else {
 		ko.Spec.Parameters = nil
 	}
+	if resp.DataCatalog.Status != "" {
+		ko.Status.Status = aws.String(string(resp.DataCatalog.Status))
+	} else {
+		ko.Status.Status = nil
+	}
 	if resp.DataCatalog.Type != "" {
 		ko.Spec.Type = aws.String(string(resp.DataCatalog.Type))
 	} else {
@@ -112,6 +127,20 @@ func (rm *resourceManager) sdkFind(
 	}
 
 	rm.setStatusDefaults(ko)
+	// Athena injects server-managed parameters into data catalogs that the user
+	// never specified (for example "catalog" for LAMBDA/HIVE and "sdk-version"
+	// for HIVE). Left in Spec.Parameters they produce a permanent diff that
+	// drives the controller to call UpdateDataCatalog on every reconcile, which
+	// in turn drops the reconstructed ARN from status. Keep only the parameters
+	// the user actually declared in the desired spec.
+	if ko.Spec.Parameters != nil && r.ko.Spec.Parameters != nil {
+		for k := range ko.Spec.Parameters {
+			if _, userSet := r.ko.Spec.Parameters[k]; !userSet {
+				delete(ko.Spec.Parameters, k)
+			}
+		}
+	}
+
 	if ko.Status.ACKResourceMetadata != nil {
 		// We need to build the resourceARN from accountID and region,
 		// since it is not directly returned by the API.
@@ -184,7 +213,55 @@ func (rm *resourceManager) sdkCreate(
 	// the original Kubernetes object we passed to the function
 	ko := desired.ko.DeepCopy()
 
+	if resp.DataCatalog.ConnectionType != "" {
+		ko.Status.ConnectionType = aws.String(string(resp.DataCatalog.ConnectionType))
+	} else {
+		ko.Status.ConnectionType = nil
+	}
+	if resp.DataCatalog.Description != nil {
+		ko.Spec.Description = resp.DataCatalog.Description
+	} else {
+		ko.Spec.Description = nil
+	}
+	if resp.DataCatalog.Error != nil {
+		ko.Status.Error = resp.DataCatalog.Error
+	} else {
+		ko.Status.Error = nil
+	}
+	if resp.DataCatalog.Name != nil {
+		ko.Spec.Name = resp.DataCatalog.Name
+	} else {
+		ko.Spec.Name = nil
+	}
+	if resp.DataCatalog.Parameters != nil {
+		ko.Spec.Parameters = aws.StringMap(resp.DataCatalog.Parameters)
+	} else {
+		ko.Spec.Parameters = nil
+	}
+	if resp.DataCatalog.Status != "" {
+		ko.Status.Status = aws.String(string(resp.DataCatalog.Status))
+	} else {
+		ko.Status.Status = nil
+	}
+	if resp.DataCatalog.Type != "" {
+		ko.Spec.Type = aws.String(string(resp.DataCatalog.Type))
+	} else {
+		ko.Spec.Type = nil
+	}
+
 	rm.setStatusDefaults(ko)
+	// CreateDataCatalog returns a fully populated DataCatalog body only for the
+	// FEDERATED catalog type. For LAMBDA, HIVE, and GLUE catalogs the response
+	// does not reliably echo the Spec fields, so the generated create-output
+	// mapping can overwrite user-provided values (including the primary key
+	// Name) with nil. Preserve the desired Spec here; the readOne (sdkFind)
+	// path reads the authoritative state from GetDataCatalog on the next
+	// reconcile.
+	ko.Spec.Name = desired.ko.Spec.Name
+	ko.Spec.Type = desired.ko.Spec.Type
+	ko.Spec.Description = desired.ko.Spec.Description
+	ko.Spec.Parameters = desired.ko.Spec.Parameters
+
 	return &resource{ko}, nil
 }
 
