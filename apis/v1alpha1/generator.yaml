@@ -88,6 +88,8 @@ resources:
         is_immutable: true
       Type:
         go_tag: json:"type,omitempty"
+      Parameters:
+        late_initialize: {}
     exceptions:
       errors:
         404:
