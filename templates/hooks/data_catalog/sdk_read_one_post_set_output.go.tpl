@@ -1,8 +1,11 @@
 	if ko.Status.ACKResourceMetadata != nil {
 		// We need to build the resourceARN from accountID and region,
 		// since it is not directly returned by the API.
-		resourceARN := ackv1alpha1.AWSResourceName(fmt.Sprintf("arn:aws:athena:%s:%s:datacatalog/%s",
-		*ko.Status.ACKResourceMetadata.Region, *ko.Status.ACKResourceMetadata.OwnerAccountID, *ko.Spec.Name))
+		resourceARN := ackv1alpha1.AWSResourceName(fmt.Sprintf("arn:%s:athena:%s:%s:datacatalog/%s",
+			*ko.Status.ACKResourceMetadata.Partition,
+			*ko.Status.ACKResourceMetadata.Region,
+			*ko.Status.ACKResourceMetadata.OwnerAccountID,
+			*ko.Spec.Name))
 
 		// Set resourceARN to status
 		ko.Status.ACKResourceMetadata.ARN = &resourceARN
